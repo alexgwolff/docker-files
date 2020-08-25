@@ -29,14 +29,12 @@ services:
       - elk
   apm:
     image: docker.elastic.co/apm/apm-server:7.9.0
-    environment:
-      - apm-server.rum=true
     ports:
       - 8200:8200
     depends_on:
       - elasticsearch
     volumes:
-      - ./apm-server.yml:/etc/apm-server/apm-server.yml
+      - ./apm-server.yml:/usr/share/apm-server/apm-server.yml
     networks:
       - elk
 volumes:
