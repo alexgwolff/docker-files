@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    http:
+      endpoint: "otel-agent-config:4317"
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 2000
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+
+  otlp/elastic:
+    endpoint: "elasticsearch:9200"
+    headers:
+      Authorization: "Bearer ${ELASTIC_APM_SERVER_TOKEN}"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging, otlp/elastic]
+    metrics:
+      receivers: [otlp]
+      exporters: [logging, otlp/elastic]
+    logs:
+      receivers: [otlp]
+      exporters: [logging, otlp/elastic]
